@@ -52,77 +52,56 @@ describe('auction routes', () => {
     });
   });
 
-
-  it('it creates a new auction', () => {
+  it('it creates a new bid, or updates it if it already exists', () => {
 
     return request(app)
-      .post('/api/v1/auctions')
+      .post('/api/v1/bids')
       .auth('jake@jake.com', 'thisIsPassword')
       .send({
-        // user: user.id,
-        title: 'auction 1',
-        description: 'this is auction 1',
+        auction: auction.id,
+        user: user.id,
+        price: '$10',
         quantity: 5,
-        endDate: Date.now()  
+        accepted: true 
       })
       .then(res => {
         expect(res.body).toEqual({
-          _id: expect.anything(),  
+          _id: bid.id,  
+          auction: auction.id,
           user: user.id,
-          title: 'auction 1',
-          description: 'this is auction 1',
+          price: '$10',
           quantity: 5,
-          endDate: expect.any(String),
-        });
+          accepted: true,
+          __v: 0 
+        });          
       });
+
   });
 
-  it('it gets an auction by id and populates the user and lists all bids', () => {
+  it('it gets a bid by id with GET and populates user and auction and selects price and quantity', () => {
       
     return request(app)
-      .get(`/api/v1/auctions/${auction._id}`)
+      .get(`/api/v1/bids/${bid._id}`)
       .auth('jake@jake.com', 'thisIsPassword')
-      .then(res => {
+      .then(res =>
         expect(res.body).toEqual({
-          _id: expect.anything(),  
-          title: 'auction 1',
-          description: 'this is auction 1',
+          _id: expect.anything(),
+          auction:  {
+            _id: expect.anything(),
+            description: 'this is auction 1',
+            endDate: expect.any(String),
+            quantity: 5,
+            title: 'auction 1',
+            user: user.id,
+          },
+          price: '$5',
           quantity: 5,
-          endDate: expect.any(String),
-          user: { 
+          user:  {
             _id: user.id,
             email: 'jake@jake.com',
-          },
-          bids: [{
-            _id: bid.id,
-            accepted: true,
-            auction: auction.id,
-            price: '$5',
-            quantity: 5,
-            user: user.id,
-            __v: 0
-          }]  
-        });
-      });
+          }
+        })
+      );
   });
 
-  it('it gets all auctions with GET', () => {
-      
-    return request(app)
-      .get('/api/v1/auctions')
-      .auth('jake@jake.com', 'thisIsPassword')
-      .then(res => {
-        expect(res.body).toEqual([{
-          _id: expect.anything(),  
-          user: user.id,
-          title: 'auction 1',
-          description: 'this is auction 1',
-          quantity: 5,
-          endDate: expect.any(String),
-        }]);
-      });
-
-  });
 });
-
-
