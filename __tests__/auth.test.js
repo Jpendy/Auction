@@ -21,5 +21,18 @@ describe('auction routes', () => {
     return mongod.stop();
   });
 
-  it('it lets me pass', () => {});
+  it('it signs up a user with a POST /signup', () => {
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        email: 'jake@jake.com',
+        password: 'thisIsPassword'
+      })
+      .then(res =>
+        expect(res.body).toEqual({
+          _id: expect.anything(),
+          email: 'jake@jake.com'
+        })
+      );
+  });
 });
