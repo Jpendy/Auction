@@ -104,4 +104,22 @@ describe('auction routes', () => {
       );
   });
 
+  it('it deletes a bid by id with DELETE', () => {
+      
+    return request(app)
+      .delete(`/api/v1/bids/${bid._id}`)
+      .auth('jake@jake.com', 'thisIsPassword')
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.anything(),  
+          auction: auction.id,
+          user: user.id,
+          price: '$5',
+          quantity: 5,
+          accepted: true,
+          __v: 0  
+        });
+      });
+  });
+
 });
