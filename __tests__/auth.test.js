@@ -21,7 +21,6 @@ describe('auction routes', () => {
     return mongod.stop();
   });
 
-
   it('it signs up a user with a POST /signup', () => {
     return request(app)
       .post('/api/v1/auth/signup')
@@ -36,6 +35,4 @@ describe('auction routes', () => {
         })
       );
   });
-
 });
-

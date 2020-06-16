@@ -52,7 +52,6 @@ describe('auction routes', () => {
     });
   });
 
-
   it('it creates a new auction', () => {
 
     return request(app)
@@ -121,8 +120,5 @@ describe('auction routes', () => {
           endDate: expect.any(String),
         }]);
       });
-
   });
 });
-
-
